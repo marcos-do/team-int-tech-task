@@ -4,21 +4,26 @@ import "./note.scss";
 interface NoteProps {
   content: string;
   size: number;
-  position: {
-    x: number;
-    y: number;
-  };
-  onMouseDown?: (e: React.MouseEvent) => void;
+  position: { x: number; y: number };
+  onMouseDown: (e: React.MouseEvent) => void;
+  onResizeMouseDown: (e: React.MouseEvent) => void;
 }
 
-const Note: React.FC<NoteProps> = ({ content, position, size, onMouseDown }) => {
+const Note: React.FC<NoteProps> = ({
+  content,
+  position,
+  size,
+  onMouseDown,
+  onResizeMouseDown,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
     <div
       ref={ref}
-      className="note row align-center justify-center"
+      className="note"
       style={{
+        position: "absolute",
         width: size,
         height: size,
         transform: `translate(${position.x}px, ${position.y}px)`,
@@ -26,6 +31,14 @@ const Note: React.FC<NoteProps> = ({ content, position, size, onMouseDown }) => 
       onMouseDown={onMouseDown}
     >
       {content}
+
+      <div
+        className="resize-handle"
+        onMouseDown={(e) => {
+          e.stopPropagation(); // prevents drag from triggering
+          onResizeMouseDown(e);
+        }}
+      />
     </div>
   );
 };
