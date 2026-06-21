@@ -9,8 +9,30 @@
   position: absolute;
   width: 12px;
   height: 12px;
+  cursor: nwse-resize;
+  background: black;    
+}
+
+.inverted-resize {
+  cursor: nesw-resize;
+}
+
+.top-left {
+  left: 0;
+  top: 0;
+}
+
+.top-right {
+  right: 0;
+  top: 0;
+}
+
+.bottom-left {
+  left: 0;
+  bottom: 0;
+}
+
+.bottom-right {
   right: 0;
   bottom: 0;
-  cursor: nwse-resize;
-  background: black;
 }
