@@ -3,17 +3,18 @@ import Note from "../note/Note";
 import type { ResizeDirection, Resize } from "../../types/rezisables";
 import type { Drag } from "../../types/dragging";
 import type { NoteModel } from "../../types/note";
+import { MIN_HEIGHT, MIN_WIDTH } from "../../constants/sizes";
 import "./notes-layout.scss";
 
 type Interaction = Drag | Resize | null;
 
-const NotesLayout: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+interface NotesLayoutProps {
+  notes: NoteModel[];
+  setNotes: React.Dispatch<React.SetStateAction<NoteModel[]>>;
+}
 
-  const [notes, setNotes] = useState<NoteModel[]>([
-    { id: "1", content: "Note 1", x: 100, y: 100, width: 150, height: 150 },
-    { id: "2", content: "Note 2", x: 300, y: 150, width: 150, height: 150 },
-  ]);
+const NotesLayout: React.FC<NotesLayoutProps> = ({ notes, setNotes }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [interaction, setInteraction] = useState<Interaction>(null);
 
@@ -84,9 +85,6 @@ const NotesLayout: React.FC = () => {
           if (interaction.type === "resize") {
             const dx = e.clientX - interaction.startX;
             const dy = e.clientY - interaction.startY;
-
-            const MIN_WIDTH = 80;
-            const MIN_HEIGHT = 80;
 
             let newWidth = interaction.startWidth;
             let newHeight = interaction.startHeight;
@@ -173,7 +171,7 @@ const NotesLayout: React.FC = () => {
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("mouseup", handleUp);
     };
-  }, [interaction]);
+  }, [interaction, setNotes]);
 
   return (
     <div ref={containerRef} className="notes-layout">
