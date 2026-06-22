@@ -8,7 +8,6 @@ interface NoteFormProps {
 }
 
 const NoteForm: React.FC<NoteFormProps> = ({ onSubmit }) => {
-  const [id, setId] = useState(0);
   const [content, setContent] = useState("");
   const [width, setWidth] = useState(MIN_WIDTH);
   const [height, setHeight] = useState(MIN_HEIGHT);
@@ -21,14 +20,13 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit }) => {
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit({
-          id: id.toString(),
+          id: crypto.randomUUID(),
           content: content,
           width: width,
           height: height,
           x: x,
           y: y,
         });
-        setId(id + 1);
       }}
     >
       <div className="row">
