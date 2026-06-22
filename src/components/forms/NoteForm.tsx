@@ -19,7 +19,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit }) => {
     <form
       className="notes-form"
       onSubmit={(e) => {
-        e.preventDefault()
+        e.preventDefault();
         onSubmit({
           id: id.toString(),
           content: content,
@@ -40,6 +40,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit }) => {
             onChange={(e) => {
               setContent(e.target.value);
             }}
+            maxLength={50}
           ></input>
         </div>
         <div className="col">
@@ -83,20 +84,32 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSubmit }) => {
           <div className="row">
             <label id="x">X:</label>
             <input
+              value={x}
               type="number"
               aria-labelledby="x"
               onChange={(e) => {
                 const value = Number(e.target.value);
                 setX(value);
               }}
+              onBlur={() => {
+                if (!x || x < 0) {
+                  setX(0);
+                }
+              }}
             ></input>
             <label id="y">Y:</label>
             <input
+              value={y}
               type="number"
               aria-labelledby="y"
               onChange={(e) => {
                 const value = Number(e.target.value);
                 setY(value);
+              }}
+              onBlur={() => {
+                if (!y || y < 0) {
+                  setY(0);
+                }
               }}
             ></input>
           </div>

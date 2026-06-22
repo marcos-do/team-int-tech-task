@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Note from "../note/Note";
+import TrashDropzone from "../dropzones/TrashDropzone";
 import type { ResizeDirection, Resize } from "../../types/rezisables";
 import type { Drag } from "../../types/dragging";
 import type { NoteModel } from "../../types/note";
@@ -15,6 +16,7 @@ interface NotesLayoutProps {
 
 const NotesLayout: React.FC<NotesLayoutProps> = ({ notes, setNotes }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const trashRef = useRef<HTMLDivElement>(null);
 
   const [interaction, setInteraction] = useState<Interaction>(null);
 
@@ -160,7 +162,24 @@ const NotesLayout: React.FC<NotesLayoutProps> = ({ notes, setNotes }) => {
       );
     }
 
-    function handleUp() {
+    function handleUp(e: MouseEvent) {
+      if (!interaction) return;
+
+      // Only care if dragging
+      if (interaction.type === "drag" && trashRef.current) {
+        const trashRect = trashRef.current.getBoundingClientRect();
+
+        const isInsideTrash =
+          e.clientX >= trashRect.left &&
+          e.clientX <= trashRect.right &&
+          e.clientY >= trashRect.top &&
+          e.clientY <= trashRect.bottom;
+
+        if (isInsideTrash) {
+          setNotes((prev) => prev.filter((note) => note.id !== interaction.id));
+        }
+      }
+
       setInteraction(null);
     }
 
@@ -188,6 +207,7 @@ const NotesLayout: React.FC<NotesLayoutProps> = ({ notes, setNotes }) => {
           }
         />
       ))}
+      <TrashDropzone ref={trashRef} />
     </div>
   );
 };
